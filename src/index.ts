@@ -14,7 +14,8 @@ const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
+    // MessageContent is a privileged intent and not needed for slash commands
+    // GatewayIntentBits.MessageContent,
   ],
 });
 
