@@ -1,7 +1,7 @@
 {
-  "name": "github-workflow-bot",
+  "name": "commit-warden",
   "version": "1.0.0",
-  "description": "A Discord bot for managing GitHub workflows",
+  "description": "A Discord bot for managing GitHub workflows and repository activities",
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",

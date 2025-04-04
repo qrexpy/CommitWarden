@@ -1,4 +1,4 @@
-# GitHub Workflow Discord Bot
+# CommitWarden
 
 A Discord bot that helps manage GitHub workflows, pull requests, and repository activities directly from Discord.
 

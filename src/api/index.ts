@@ -32,7 +32,7 @@ export default async (req: VercelRequest, res: VercelResponse) => {
   // Health check
   return res.status(200).json({
     status: 'ok',
-    message: 'GitHub Workflow Discord Bot is running',
+    message: 'CommitWarden is running',
     environment: process.env.NODE_ENV || 'development',
   });
 }; 
