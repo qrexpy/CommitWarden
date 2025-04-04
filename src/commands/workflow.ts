@@ -1,5 +1,6 @@
-import { SlashCommandBuilder, CommandInteraction, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'discord.js';
 import { Octokit } from '@octokit/rest';
+import { Command } from '../types/discord';
 
 export const data = new SlashCommandBuilder()
   .setName('workflow')
@@ -33,7 +34,7 @@ export const data = new SlashCommandBuilder()
       )
   );
 
-export async function execute(interaction: CommandInteraction, octokit: Octokit) {
+export async function execute(interaction: ChatInputCommandInteraction, octokit: Octokit) {
   const subcommand = interaction.options.getSubcommand();
   const repo = interaction.options.getString('repo')!;
   const [owner, repository] = repo.split('/');
@@ -70,7 +71,7 @@ export async function execute(interaction: CommandInteraction, octokit: Octokit)
     const workflow = interaction.options.getString('workflow')!;
 
     try {
-      const { data: workflowRun } = await octokit.actions.createWorkflowDispatch({
+      await octokit.actions.createWorkflowDispatch({
         owner,
         repo: repository,
         workflow_id: workflow,

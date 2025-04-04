@@ -1,5 +1,6 @@
-import { SlashCommandBuilder, CommandInteraction, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
 import { Octokit } from '@octokit/rest';
+import { Command } from '../types/discord';
 
 export const data = new SlashCommandBuilder()
   .setName('repo')
@@ -11,7 +12,7 @@ export const data = new SlashCommandBuilder()
       .setRequired(true)
   );
 
-export async function execute(interaction: CommandInteraction, octokit: Octokit) {
+export async function execute(interaction: ChatInputCommandInteraction, octokit: Octokit) {
   const repo = interaction.options.getString('repository')!;
   const [owner, repository] = repo.split('/');
 
@@ -46,20 +47,28 @@ export async function execute(interaction: CommandInteraction, octokit: Octokit)
       .addFields({
         name: 'Top Languages',
         value: Object.entries(languages)
-          .sort(([, a], [, b]) => b - a)
+          .sort(([, a], [, b]) => (Number(b) - Number(a)))
           .slice(0, 5)
-          .map(([lang, bytes]) => `${lang}: ${((bytes / Object.values(languages).reduce((a, b) => a + b, 0)) * 100).toFixed(1)}%`)
-          .join('\n')
-      })
-      .addFields({
+          .map(([lang, bytes]) => `${lang}: ${((Number(bytes) / Object.values(languages).reduce((a, b) => a + Number(b), 0)) * 100).toFixed(1)}%`)
+          .join('\n') || 'No languages detected'
+      });
+
+    // Only add contributors if there are any
+    if (contributors.length > 0) {
+      embed.addFields({
         name: 'Top Contributors',
         value: contributors
           .slice(0, 5)
           .map(contributor => `${contributor.login}: ${contributor.contributions} commits`)
           .join('\n')
-      })
-      .setURL(repoData.html_url)
-      .setThumbnail(repoData.owner.avatar_url);
+      });
+    }
+
+    embed.setURL(repoData.html_url);
+    
+    if (repoData.owner && repoData.owner.avatar_url) {
+      embed.setThumbnail(repoData.owner.avatar_url);
+    }
 
     await interaction.reply({ embeds: [embed] });
   } catch (error) {

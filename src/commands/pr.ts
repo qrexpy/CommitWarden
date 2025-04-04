@@ -1,5 +1,6 @@
-import { SlashCommandBuilder, CommandInteraction, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
 import { Octokit } from '@octokit/rest';
+import { Command } from '../types/discord';
 
 export const data = new SlashCommandBuilder()
   .setName('pr')
@@ -33,7 +34,7 @@ export const data = new SlashCommandBuilder()
       )
   );
 
-export async function execute(interaction: CommandInteraction, octokit: Octokit) {
+export async function execute(interaction: ChatInputCommandInteraction, octokit: Octokit) {
   const subcommand = interaction.options.getSubcommand();
   const repo = interaction.options.getString('repo')!;
   const [owner, repository] = repo.split('/');
