@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "dist/api/**/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/dist/api/$1.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/dist/api/index.js"
+    }
+  ],
+  "env": {
+    "DISCORD_TOKEN": "@discord_token",
+    "DISCORD_CLIENT_ID": "@discord_client_id",
+    "DISCORD_GUILD_ID": "@discord_guild_id",
+    "GITHUB_TOKEN": "@github_token",
+    "GITHUB_WEBHOOK_SECRET": "@github_webhook_secret" 
+  }
+} 
